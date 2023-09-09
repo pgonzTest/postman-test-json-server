@@ -30,7 +30,11 @@ jobs:
   
         # Start JSON Server with the copy of db.json
         - name: Start JSON Server
-          run: npx json-server --watch dbcopy.json
+          run: npx json-server --watch dbcopy.json &
+
+        # Sleep for 5 seconds to allow JSON Server to start
+        - name: Wait for JSON Server
+          run: sleep 5
   
         - name: Run Postman Tests
           run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json
