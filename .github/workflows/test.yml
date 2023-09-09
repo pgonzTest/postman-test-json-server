@@ -16,7 +16,7 @@ jobs:
         - name: Install Node.js
           uses: actions/setup-node@v2
           with:
-            node-version: 14
+            node-version: 16
   
         - name: Install Newman
           run: npm install -g newman
@@ -36,6 +36,14 @@ jobs:
         - name: Wait for JSON Server
           run: sleep 5
   
+        # Run Postman Tests and generate a report
         - name: Run Postman Tests
-          run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json
+          run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json --reporters cli,junit --reporter-junit-export postman-report.xml
+
+        # Upload the Postman test report as an artifact
+        - name: Upload Test Report
+          uses: actions/upload-artifact@v2
+          with:
+           name: postman-test-report
+           path: postman-report.xml
   
