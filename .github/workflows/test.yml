@@ -35,15 +35,31 @@ jobs:
         # Sleep for 5 seconds to allow JSON Server to start
         - name: Wait for JSON Server
           run: sleep 5
-  
-        # Run Postman Tests and generate a report
-        - name: Run Postman Tests
-          run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json --reporters cli,junit --reporter-junit-export postman-report.xml
 
+        # Install newman reporter Html extra
+        - name: Install newman html exporter
+          run: npm install -g newman-reporter-htmlextra
+  
+        # Run Postman Tests and generate an HTML report
+        - name: Run Postman Tests
+          run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json --reporters cli,junit,htmlextra --reporter-junit-export postman-report.xml --reporter-htmlextra-export postman-html-report.html
+        
+        # Convert XML report to HTML
+        - name: Convert XML to HTML
+          run: node convert-xml-to-html.js
+        
         # Upload the Postman test report as an artifact
         - name: Upload Test Report
           uses: actions/upload-artifact@v2
           with:
-           name: postman-test-report
-           path: postman-report.xml
+            name: postman-test-report
+            path: postman-report.xml
+
+        # Upload the HTML report as an artifact
+        - name: Upload HTML Report
+          uses: actions/upload-artifact@v2
+          with:
+            name: postman-html-report
+            path: postman-html-report.html
+
   
