@@ -20,6 +20,10 @@ jobs:
   
         - name: Install Newman
           run: npm install -g newman
+
+        # Set up NODE_PATH environment variable
+        - name: Set up NODE_PATH
+          run: echo "NODE_PATH=$(npm root -g)" >> $GITHUB_ENV
   
         - name: Install JSON Server
           run: npm install -g json-server
