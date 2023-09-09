@@ -1,0 +1,207 @@
+{
+	"info": {
+		"_postman_id": "24b171c1-2c27-4474-b321-8ef03a7cad64",
+		"name": "Users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14383058"
+	},
+	"item": [
+		{
+			"name": "Status code verification",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const getData = () => pm.response.json();\r",
+							"\r",
+							"pm.test(\"users are returned\", () => {\r",
+							"    const data = getData();\r",
+							"    pm.expect(data).to.be.an(\"array\").and.not.be.empty;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"check user keys\", () => {\r",
+							"   const data = getData();\r",
+							"   for (let i = 0; i < data.length; i++) {\r",
+							"        pm.expect(data[i]).to.have.keys('id', 'username', 'email').and.be.an(\"object\");\r",
+							"        pm.expect(data[i].id).to.be.a('number').and.to.not.be.null;\r",
+							"        pm.expect(data[i].username).to.be.a('string').and.not.be.empty;\r",
+							"        pm.expect(data[i].email).to.be.a('string').and.not.be.empty;\r",
+							"    }\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"{{newUserId}}\",\r\n    \"username\": \"{{newUsername}}\",\r\n    \"email\": \"{{newUserEmail}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check new user added",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const getData = () => pm.response.json();\r",
+							"\r",
+							"pm.test(\"check user added exists\", () => {\r",
+							"    const data = getData();\r",
+							"    const lastUser = data[data.length - 1]; // Get the last user in the array\r",
+							"\r",
+							"    // Check if the last user's values match the environment variables\r",
+							"    pm.expect(lastUser.id).to.equal(pm.collectionVariables.get(\"newUserId\"));\r",
+							"    pm.expect(lastUser.username).to.equal(pm.collectionVariables.get(\"newUsername\"));\r",
+							"    pm.expect(lastUser.email).to.equal(pm.collectionVariables.get(\"newUserEmail\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "newUserId",
+			"value": "3",
+			"type": "string"
+		},
+		{
+			"key": "newUsername",
+			"value": "user3",
+			"type": "string"
+		},
+		{
+			"key": "newUserEmail",
+			"value": "user3@example.com",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,37 @@
+name: Postman Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+    test:
+      runs-on: ubuntu-latest
+  
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v2
+  
+        - name: Install Node.js
+          uses: actions/setup-node@v2
+          with:
+            node-version: 14
+  
+        - name: Install Newman
+          run: npm install -g newman
+  
+        - name: Install JSON Server
+          run: npm install -g json-server
+
+        # Create a copy of the original db.json
+        - name: Create db.json Copy
+          run: cp db.json dbcopy.json
+  
+        # Start JSON Server with the copy of db.json
+        - name: Start JSON Server
+          run: npx json-server --watch dbcopy.json
+  
+        - name: Run Postman Tests
+          run: newman run postman-tests/Users.postman_collection.json -e postman-tests/api-test-json-server.postman_environment.json
+  
