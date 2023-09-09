@@ -46,7 +46,7 @@ jobs:
         
         # Convert XML report to HTML
         - name: Convert XML to HTML
-          run: node convert-xml-to-html.js
+          run: node postman-tests/Report/convert-xml-to-html.js
         
         # Upload the Postman test report as an artifact
         - name: Upload Test Report
