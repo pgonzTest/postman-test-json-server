@@ -54,7 +54,7 @@
 							"   const data = getData();\r",
 							"   for (let i = 0; i < data.length; i++) {\r",
 							"        pm.expect(data[i]).to.have.keys('id', 'username', 'email').and.be.an(\"object\");\r",
-							"        pm.expect(data[i].id).to.be.a('number').and.to.not.be.null;\r",
+							"        pm.expect(data[i].id).to.be.a('string').and.to.not.be.null;\r",
 							"        pm.expect(data[i].username).to.be.a('string').and.not.be.empty;\r",
 							"        pm.expect(data[i].email).to.be.a('string').and.not.be.empty;\r",
 							"    }\r",
